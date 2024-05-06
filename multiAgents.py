@@ -74,6 +74,8 @@ class ReflexAgent(Agent):
         newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
 
         "*** YOUR CODE HERE ***"
+        "initial commit"
+        
         return successorGameState.getScore()
 
 def scoreEvaluationFunction(currentGameState):
