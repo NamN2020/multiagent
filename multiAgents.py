@@ -74,7 +74,8 @@ class ReflexAgent(Agent):
         newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
 
         "*** YOUR CODE HERE ***"
-        "initial commit"
+        foodList = newFood.asList()
+        
         
         return successorGameState.getScore()
 
