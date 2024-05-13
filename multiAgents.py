@@ -161,18 +161,17 @@ class MinimaxAgent(MultiAgentSearchAgent):
     def minimizer(self, gameState, depth, agent): 
         minVal = 0
         for action in gameState.getLegalActions(agent):
+            successor = gameState.generateSuccessor(agent, action)
             if agent == gameState.getNumAgents() - 1:
-                successor = gameState.generateSuccessor(agent, action)
                 val = self.minimaxHelper(successor, depth + 1, 0)
                 minVal = min(minVal, val)
             else:
-                successor = gameState.generateSuccessor(agent, action)
                 val = self.minimaxHelper(successor, depth, agent + 1)
                 minVal = min(minVal, val)
         return minVal
     
     def minimaxHelper(self, gameState, depth, agent):
-        if(gameState.isWin() or gameState.isLose() or depth == self.depth):
+        if gameState.isWin() or gameState.isLose() or depth == self.depth:
             return self.evaluationFunction(gameState)
         elif agent == 0:
             return self.maximizer(gameState, depth)
