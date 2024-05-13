@@ -138,7 +138,19 @@ class MinimaxAgent(MultiAgentSearchAgent):
         Returns whether or not the game state is a losing state
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+       # util.raiseNotDefined()
+        
+    def maximizer(self, gameState, depth): 
+        
+        return None
+    
+    def minimizer(self, gameState, depth, agent): 
+        
+        return None
+    
+    def minimaxHelper(self, gameState, depth, agent):
+        
+        return None        
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
     """
