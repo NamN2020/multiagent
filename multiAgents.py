@@ -138,9 +138,9 @@ class MinimaxAgent(MultiAgentSearchAgent):
         Returns whether or not the game state is a losing state
         """
         "*** YOUR CODE HERE ***"
-        maxVal = 0
+        maxVal = float("-inf")
         stopAction = Directions.STOP
-        for action in gameState.getLegalActins(0):
+        for action in gameState.getLegalActions(0):
             nextState = gameState.generateSuccessor(0, action)
             nextVal = self.minimaxHelper(nextState, 0, 1)
             if nextVal > maxVal:
@@ -151,7 +151,7 @@ class MinimaxAgent(MultiAgentSearchAgent):
        # util.raiseNotDefined()
         
     def maximizer(self, gameState, depth): 
-        maxVal = 0
+        maxVal = float("-inf")
         for action in gameState.getLegalActions(0):
             successor = gameState.generateSuccessor(0, action)
             val = self.minimaxHelper(successor, depth, 1)
@@ -159,7 +159,7 @@ class MinimaxAgent(MultiAgentSearchAgent):
         return maxVal
     
     def minimizer(self, gameState, depth, agent): 
-        minVal = 0
+        minVal = float("inf")
         for action in gameState.getLegalActions(agent):
             successor = gameState.generateSuccessor(agent, action)
             if agent == gameState.getNumAgents() - 1:
