@@ -149,7 +149,13 @@ class MinimaxAgent(MultiAgentSearchAgent):
         return stopAction
        
        # util.raiseNotDefined()
-        
+    
+    """
+    maximizer:
+        Assumes we are the maximizer (Pacman) and 
+        checks all legal actions with their respective
+        evaluation score and returns maximum.
+    """    
     def maximizer(self, gameState, depth): 
         maxVal = float("-inf")
         for action in gameState.getLegalActions(0):
@@ -158,6 +164,12 @@ class MinimaxAgent(MultiAgentSearchAgent):
             maxVal = max(maxVal, val)
         return maxVal
     
+    """
+    minimizer:
+        Assumes we are the minimizer (Ghosts) and 
+        checks all legal actions with their respective
+        evaluation score and returns minimum.
+    """   
     def minimizer(self, gameState, depth, agent): 
         minVal = float("inf")
         for action in gameState.getLegalActions(agent):
@@ -170,6 +182,12 @@ class MinimaxAgent(MultiAgentSearchAgent):
                 minVal = min(minVal, val)
         return minVal
     
+    """
+    minimaxHelper:
+        Checks the state of the game and returns
+        evaluation score if a condition is meet.
+        If not then go further.
+    """   
     def minimaxHelper(self, gameState, depth, agent):
         if gameState.isWin() or gameState.isLose() or depth == self.depth:
             return self.evaluationFunction(gameState)
