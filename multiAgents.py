@@ -300,8 +300,7 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
     maximizer:
         Assumes we are the maximizer (Pacman) and 
         checks all legal actions with their respective
-        evaluation score that accounts alpha and beta 
-        values and returns maximum.
+        evaluation and returns maximum.
     """ 
     def maximizer(self, gameState, depth):
         maxVal = float("-inf")
@@ -312,29 +311,28 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
         return maxVal
 
     """
-    avgValHelper:
-        Assumes we are the minimizer (Ghosts) and 
-        checks all legal actions with their respective
-        evaluation score that accounts alpha and beta
-        values and returns minimum.
+    expectVal:
+        Checks all legal actions of the respective agent
+        and search further with the associated path. 
+        return average value.
     """
-    def avgValHelper(self, gameState, depth, agent):
-        avgVal = 0.0
+    def expectVal(self, gameState, depth, agent):
+        expVal = 0.0
         for action in gameState.getLegalActions(agent):
             successor = gameState.generateSuccessor(agent, action)
             if agent == gameState.getNumAgents() - 1:
                 val = self.expectimaxHelper(successor, depth + 1, 0)
-                avgVal += val
+                expVal += val
             else:
                 val = self.expectimaxHelper(successor, depth, agent + 1)
-                avgVal += val
-        return avgVal
+                expVal += val
+        return expVal
     
     """
     expectimaxHelper:
         Checks the state of the game and returns
         evaluation score if a condition is meet.
-        If not then go further.
+        If not then search further.
     """ 
     def expectimaxHelper(self, gameState, depth, agent):
         if depth == self.depth or gameState.isWin() or gameState.isLose():
@@ -342,7 +340,7 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
         elif agent == 0:
             return self.maximizer(gameState, depth)
         else:
-            return self.avgValHelper(gameState, depth, agent)
+            return self.expectVal(gameState, depth, agent)
 
 def betterEvaluationFunction(currentGameState):
     """
