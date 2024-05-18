@@ -319,15 +319,15 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
         values and returns minimum.
     """
     def avgVal(self, gameState, depth, agent):
-        avgVal = 0
+        avgVal = 0.0
         for action in gameState.getLegalActions(agent):
             successor = gameState.generateSuccessor(agent, action)
             if agent == gameState.getNumAgents() - 1:
                 val = self.expectimaxHelper(successor, depth + 1, 0)
-                avgVal = avgVal + val
+                avgVal += val
             else:
                 val = self.expectimaxHelper(successor, depth, agent + 1)
-                avgVal = avgVal + val
+                avgVal += val
         return avgVal
     
     """
