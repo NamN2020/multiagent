@@ -246,7 +246,6 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
         minVal = float("inf")
         for action in gameState.getLegalActions(agent):
             successor = gameState.generateSuccessor(agent, action)
-            
             if agent == gameState.getNumAgents() - 1:
                 val = self.alphabetaHelper(successor, depth + 1, 0, alpha, beta)
                 minVal = min(minVal, val)
@@ -282,13 +281,68 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
 
     def getAction(self, gameState):
         """
-        Returns the expectimax action using self.depth and self.evaluationFunction
+          Returns the expectimax action using self.depth and self.evaluationFunction
 
-        All ghosts should be modeled as choosing uniformly at random from their
-        legal moves.
+          All ghosts should be modeled as choosing uniformly at random from their
+          legal moves.
         """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        maxVal = float("-inf")
+        stopAction = Directions.STOP
+        for action in gameState.getLegalActions(0):
+            nextState = gameState.generateSuccessor(0, action)
+            nextVal = self.expectimaxHelper(nextState, 0, 1)
+            if nextVal > maxVal:
+                maxVal = nextVal
+                stopAction = action
+        return stopAction 
+
+    """
+    maximizer:
+        Assumes we are the maximizer (Pacman) and 
+        checks all legal actions with their respective
+        evaluation score that accounts alpha and beta 
+        values and returns maximum.
+    """ 
+    def maximizer(self, gameState, depth):
+        maxVal = float("-inf")
+        for action in gameState.getLegalActions(0):
+            successor = gameState.generateSuccessor(0, action)
+            val = self.expectimaxHelper(successor, depth, 1)
+            maxVal = max(maxVal, val)
+        return maxVal
+
+    """
+    minimizer:
+        Assumes we are the minimizer (Ghosts) and 
+        checks all legal actions with their respective
+        evaluation score that accounts alpha and beta
+        values and returns minimum.
+    """
+    def avgVal(self, gameState, depth, agent):
+        avgVal = 0
+        for action in gameState.getLegalActions(agent):
+            successor = gameState.generateSuccessor(agent, action)
+            if agent == gameState.getNumAgents() - 1:
+                val = self.expectimaxHelper(successor, depth + 1, 0)
+                avgVal = avgVal + val
+            else:
+                val = self.expectimaxHelper(successor, depth, agent + 1)
+                avgVal = avgVal + val
+        return avgVal
+    
+    """
+    expectimaxHelper:
+        Checks the state of the game and returns
+        evaluation score if a condition is meet.
+        If not then go further.
+    """ 
+    def expectimaxHelper(self, gameState, depth, agent):
+        if depth == self.depth or gameState.isWin() or gameState.isLose():
+            return self.evaluationFunction(gameState)
+        elif agent == 0:
+            return self.maximizer(gameState, depth)
+        else:
+            return self.avgVal(gameState, depth, agent)
 
 def betterEvaluationFunction(currentGameState):
     """
