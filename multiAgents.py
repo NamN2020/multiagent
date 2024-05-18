@@ -312,13 +312,13 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
         return maxVal
 
     """
-    minimizer:
+    avgValHelper:
         Assumes we are the minimizer (Ghosts) and 
         checks all legal actions with their respective
         evaluation score that accounts alpha and beta
         values and returns minimum.
     """
-    def avgVal(self, gameState, depth, agent):
+    def avgValHelper(self, gameState, depth, agent):
         avgVal = 0.0
         for action in gameState.getLegalActions(agent):
             successor = gameState.generateSuccessor(agent, action)
@@ -342,7 +342,7 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
         elif agent == 0:
             return self.maximizer(gameState, depth)
         else:
-            return self.avgVal(gameState, depth, agent)
+            return self.avgValHelper(gameState, depth, agent)
 
 def betterEvaluationFunction(currentGameState):
     """
