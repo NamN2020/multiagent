@@ -74,12 +74,19 @@ class ReflexAgent(Agent):
         newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
 
         "*** YOUR CODE HERE ***"
-
+        """
+        evaluationFunction:
+            Evaluates closest ghost and food,
+            if closest ghost distance less than 2 manhattan distance
+            then it returns -inf, if action is STOP then return -inf
+            If game state is win, then return inf, 
+            else it returns successor game score and adds more to the score
+            the closer the closest food distance is
+        """    
         foodList = newFood.asList()
 
         ghostDistance = 999999
         foodDistance = 999999
-        # capsuleDistance = 999999
 
         for ghost in successorGameState.getGhostPositions():
             ghostDistance = min(ghostDistance, manhattanDistance(newPos, ghost)) 
@@ -94,7 +101,7 @@ class ReflexAgent(Agent):
         if action == "STOP":
             return float('-inf')
 
-        return successorGameState.getScore() + 10/foodDistance
+        return successorGameState.getScore() + 1/foodDistance
 
 def scoreEvaluationFunction(currentGameState):
     """
@@ -366,36 +373,39 @@ def betterEvaluationFunction(currentGameState):
 
     DESCRIPTION: <write something here so we know what you did>
     """
-    # Useful information you can extract from a GameState (pacman.py)
-    # successorGameState = currentGameState.generatePacmanSuccessor(action)
-    # newPos = successorGameState.getPacmanPosition()
-    # newFood = successorGameState.getFood()
-    # newGhostStates = successorGameState.getGhostStates()
-    # newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
-
     "*** YOUR CODE HERE ***"
+    """
+    betterEvaluationFunction:
+        Evaluates current game state for all distances of all food,
+        the distance of the closest ghost and number of food left.
+        If game state is win, then return inf
+        If the closest ghost manhattan distance is less than 2, then return -inf,
+        else it returns current game state score while accounting 
+        for minimum and maximum food distances and ammount of food remaining.
+        It prioritizes food remaining left and minimum food distance
+    """    
     newPos = currentGameState.getPacmanPosition()
     newFood = currentGameState.getFood()
     newGhostStates = currentGameState.getGhostStates()
 
     foodList = newFood.asList()
 
+    foodDistanceList = []
     ghostDistance = 999999
-    foodDistance = 999999
 
     for ghost in currentGameState.getGhostPositions():
         ghostDistance = min(ghostDistance, manhattanDistance(newPos, ghost)) 
 
     for food in foodList:
-        foodDistance = min(foodDistance, manhattanDistance(newPos, food)) 
-
+        foodDistanceList.append(manhattanDistance(newPos, food))
+    
     if currentGameState.isWin():
         return float('inf')
     if ghostDistance < 2:
         return float('-inf')
 
-    return currentGameState.getScore() - foodDistance
-    #util.raiseNotDefined()
+    return currentGameState.getScore() - 2*min(foodDistanceList) - max(foodDistanceList) - 100*currentGameState.getNumFood() 
+    # #util.raiseNotDefined()
 
 # Abbreviation
 better = betterEvaluationFunction
