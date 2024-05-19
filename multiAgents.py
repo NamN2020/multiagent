@@ -366,8 +366,36 @@ def betterEvaluationFunction(currentGameState):
 
     DESCRIPTION: <write something here so we know what you did>
     """
+    # Useful information you can extract from a GameState (pacman.py)
+    # successorGameState = currentGameState.generatePacmanSuccessor(action)
+    # newPos = successorGameState.getPacmanPosition()
+    # newFood = successorGameState.getFood()
+    # newGhostStates = successorGameState.getGhostStates()
+    # newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
+
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    newPos = currentGameState.getPacmanPosition()
+    newFood = currentGameState.getFood()
+    newGhostStates = currentGameState.getGhostStates()
+
+    foodList = newFood.asList()
+
+    ghostDistance = 999999
+    foodDistance = 999999
+
+    for ghost in currentGameState.getGhostPositions():
+        ghostDistance = min(ghostDistance, manhattanDistance(newPos, ghost)) 
+
+    for food in foodList:
+        foodDistance = min(foodDistance, manhattanDistance(newPos, food)) 
+
+    if currentGameState.isWin():
+        return float('inf')
+    if ghostDistance < 2:
+        return float('-inf')
+
+    return currentGameState.getScore() - foodDistance
+    #util.raiseNotDefined()
 
 # Abbreviation
 better = betterEvaluationFunction
